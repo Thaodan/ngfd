@@ -179,7 +179,7 @@ main (int argc, char *argv[])
     AppData app;
 
     memset (&app, 0, sizeof (app));
-    app.default_loglevel = N_LOG_LEVEL_DEBUG;
+    app.default_loglevel = N_LOG_LEVEL_ERROR;
     app.use_default_loglevel = TRUE;
     n_log_initialize (app.default_loglevel);
 
