@@ -301,8 +301,9 @@ static int ffm_setup_effects(const NProplist *props, GHashTable *effects)
 	char *key;
 	struct ff_effect ff;
 	struct ffm_effect_data *data;
+#define CUSTOM_DATA_LEN    3
 	// We're using just an int to map to the array below.
-	__s16 custom_data[sizeof(int)/sizeof(__s16)] = { 0 };
+        __s16 custom_data[CUSTOM_DATA_LEN] = {0, 0, 0};
 	GHashTableIter iter;
 
 	if(!effects || !props) {
@@ -435,11 +436,12 @@ static int ffm_setup_effects(const NProplist *props, GHashTable *effects)
 				ff.u.periodic.waveform = FF_SINE;
 
 			if (ff.u.periodic.waveform == FF_CUSTOM) {
-				int* custom = (void*)custom_data;
-				*custom = ffm_get_int_value(props,
+				__s16 custom = ffm_get_int_value(props,
 					key, "_CUSTOM", 0, UINT16_MAX);
+                                custom_data[0]= custom;
 				ff.u.periodic.custom_data = custom_data;
-				ff.u.periodic.custom_len = sizeof(int)/sizeof(__s16);
+				ff.u.periodic.custom_len =
+                                        sizeof(__u32) * CUSTOM_DATA_LEN;
 			}
 
 			ff.u.periodic.period = ffm_get_int_value(props,
